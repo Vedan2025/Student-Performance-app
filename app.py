@@ -40,6 +40,7 @@ if st.button("Predict"):
 
     if 'Family Background_High Income' in columns:
         input_data['Family Background_High Income'] = 1 if family == "High Income" else 0
+        st.markdown("---")
 
     prediction = model.predict(input_data)[0]
 
