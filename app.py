@@ -44,8 +44,4 @@ if st.button("Predict"):
     prediction = model.predict(input_data)[0]
 
     st.success(f"Predicted Marks: {round(prediction,2)}")
-    # Predict
-    prediction = model.predict(input_data)[0]
-
-    # Show result
-    st.success(f"Predicted Marks: {round(prediction,2)}")
+   
