@@ -73,6 +73,7 @@ if prediction > 70:
     st.write("👉 Maintain consistency and keep practicing!")
 st.markdown("---")
 st.header("📊 Data Insights Dashboard")
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 
