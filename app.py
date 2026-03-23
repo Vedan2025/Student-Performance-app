@@ -26,6 +26,7 @@ high = 1 if family == "High Income" else 0
 
 if st.button("Predict"):
 
+    # 🔹 Create input
     input_data = pd.DataFrame(0, index=[0], columns=columns)
 
     input_data['Study_hours'] = study_hours
@@ -42,12 +43,13 @@ if st.button("Predict"):
     if 'Family Background_High Income' in columns:
         input_data['Family Background_High Income'] = 1 if family == "High Income" else 0
 
-    # 🔥 Prediction happens here
+    # 🔥 Prediction
     prediction = model.predict(input_data)[0]
 
+    # 🔹 Output
     st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
 
-    # 🔥 NOW safe to use prediction
+    # 🔹 Performance
     if prediction < 40:
         st.error("⚠️ Student is At Risk! Needs immediate attention.")
     elif prediction < 70:
@@ -55,23 +57,23 @@ if st.button("Predict"):
     else:
         st.success("🌟 Great performance! Keep it up!")
 
-# Smart Recommendations
-st.subheader("📌 Recommendations")
+    # 🔹 Recommendations
+    st.subheader("📌 Recommendations")
 
-if study_hours < 2:
-    st.write("👉 Increase study time to at least 2–3 hours daily.")
+    if study_hours < 2:
+        st.write("👉 Increase study time to at least 2–3 hours daily.")
 
-if attendance < 75:
-    st.write("👉 Improve attendance to above 75%.")
+    if attendance < 75:
+        st.write("👉 Improve attendance to above 75%.")
 
-if internet == "No":
-    st.write("👉 Access to internet can significantly improve learning.")
+    if internet == "No":
+        st.write("👉 Access to internet can significantly improve learning.")
 
-if family == "Low Income":
-    st.write("👉 Seek academic support programs or scholarships.")
+    if family == "Low Income":
+        st.write("👉 Seek academic support programs or scholarships.")
 
-if prediction > 70:
-    st.write("👉 Maintain consistency and keep practicing!")
+    if prediction > 70:
+        st.write("👉 Maintain consistency and keep practicing!")
 st.markdown("---")
 st.header("📊 Data Insights Dashboard")
 
