@@ -76,8 +76,6 @@ if st.button("Predict"):
     if prediction > 70:
         st.write("👉 Maintain consistency and keep practicing!")
 
-if not st.session_state.predicted:
-    st.info("👆 Enter details and click Predict to see results")
 st.markdown("---")
 st.header("📊 Data Insights Dashboard")
 
