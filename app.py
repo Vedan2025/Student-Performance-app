@@ -23,8 +23,7 @@ internet_yes = 1 if internet == "Yes" else 0
 low = 1 if family == "Low Income" else 0
 middle = 1 if family == "Middle Income" else 0
 high = 1 if family == "High Income" else 0
-if not st.session_state.predicted:
-    st.info("👆 Enter details and click Predict to see results")
+
 if st.button("Predict"):
 
     # 🔹 Create input
