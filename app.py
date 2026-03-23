@@ -41,18 +41,19 @@ if st.button("Predict"):
 
     if 'Family Background_High Income' in columns:
         input_data['Family Background_High Income'] = 1 if family == "High Income" else 0
-        st.markdown("---")
 
+    # 🔥 Prediction happens here
     prediction = model.predict(input_data)[0]
 
-    st.success(f"Predicted Marks: {round(prediction,2)}")
-   # Performance Message
-if prediction < 40:
-    st.error("⚠️ Student is At Risk! Needs immediate attention.")
-elif prediction < 70:
-    st.warning("📊 Average performance. Can improve with effort.")
-else:
-    st.success("🌟 Great performance! Keep it up!")
+    st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
+
+    # 🔥 NOW safe to use prediction
+    if prediction < 40:
+        st.error("⚠️ Student is At Risk! Needs immediate attention.")
+    elif prediction < 70:
+        st.warning("📊 Average performance. Can improve with effort.")
+    else:
+        st.success("🌟 Great performance! Keep it up!")
 
 # Smart Recommendations
 st.subheader("📌 Recommendations")
