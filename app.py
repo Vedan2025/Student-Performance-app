@@ -3,6 +3,9 @@ import pandas as pd
 import numpy as np
 import joblib
 
+if "predicted" not in st.session_state:
+    st.session_state.predicted = False
+    
 model = joblib.load("model.pkl")
 columns = joblib.load("columns.pkl")
 df = pd.read_csv("student_project.csv")
@@ -23,7 +26,8 @@ internet_yes = 1 if internet == "Yes" else 0
 low = 1 if family == "Low Income" else 0
 middle = 1 if family == "Middle Income" else 0
 high = 1 if family == "High Income" else 0
-
+if not st.session_state.predicted:
+    st.info("👆 Enter details and click Predict to see results")
 if st.button("Predict"):
 
     # 🔹 Create input
@@ -74,6 +78,9 @@ if st.button("Predict"):
 
     if prediction > 70:
         st.write("👉 Maintain consistency and keep practicing!")
+
+if not st.session_state.predicted:
+    st.info("👆 Enter details and click Predict to see results")
 st.markdown("---")
 st.header("📊 Data Insights Dashboard")
 
