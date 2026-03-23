@@ -44,4 +44,28 @@ if st.button("Predict"):
     prediction = model.predict(input_data)[0]
 
     st.success(f"Predicted Marks: {round(prediction,2)}")
-   
+   # Performance Message
+if prediction < 40:
+    st.error("⚠️ Student is At Risk! Needs immediate attention.")
+elif prediction < 70:
+    st.warning("📊 Average performance. Can improve with effort.")
+else:
+    st.success("🌟 Great performance! Keep it up!")
+
+# Smart Recommendations
+st.subheader("📌 Recommendations")
+
+if study_hours < 2:
+    st.write("👉 Increase study time to at least 2–3 hours daily.")
+
+if attendance < 75:
+    st.write("👉 Improve attendance to above 75%.")
+
+if internet == "No":
+    st.write("👉 Access to internet can significantly improve learning.")
+
+if family == "Low Income":
+    st.write("👉 Seek academic support programs or scholarships.")
+
+if prediction > 70:
+    st.write("👉 Maintain consistency and keep practicing!")
