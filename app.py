@@ -2,9 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-
-if "predicted" not in st.session_state:
-    st.session_state.predicted = False
     
 model = joblib.load("model.pkl")
 columns = joblib.load("columns.pkl")
