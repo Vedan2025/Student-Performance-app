@@ -5,6 +5,7 @@ import joblib
 
 model = joblib.load("model.pkl")
 columns = joblib.load("columns.pkl")
+df = pd.read_csv("student_project.csv")
 # Title
 st.title("🎓 Student Performance Predictor")
 
@@ -70,3 +71,20 @@ if family == "Low Income":
 
 if prediction > 70:
     st.write("👉 Maintain consistency and keep practicing!")
+st.markdown("---")
+st.header("📊 Data Insights Dashboard")
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+fig1, ax1 = plt.subplots()
+sns.histplot(df['Marks'], bins=10, ax=ax1)
+ax1.set_title("Marks Distribution")
+st.pyplot(fig1)
+fig2, ax2 = plt.subplots()
+sns.scatterplot(x=df['Study_hours'], y=df['Marks'], ax=ax2)
+ax2.set_title("Study Hours vs Marks")
+st.pyplot(fig2)
+fig3, ax3 = plt.subplots()
+sns.heatmap(df[['Study_hours','Attendance','Marks']].corr(), annot=True, ax=ax3)
+ax3.set_title("Correlation Heatmap")
+st.pyplot(fig3)
