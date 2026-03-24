@@ -98,14 +98,22 @@ if st.button("Predict"):
     if 'Family Background_High Income' in columns:
         input_data['Family Background_High Income'] = 1 if family == "High Income" else 0
 
-    # 🔥 Prediction
-    prediction = model.predict(input_data)[0]
+# 🔥 Prediction
+prediction = model.predict(input_data)[0]
 
-    st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
+st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
 
-    # Student Category
-    st.markdown("---")
-    st.subheader("🎯 Student Category")
+# 🔥 ADD THIS HERE 👇
+st.markdown("---")
+st.subheader("📊 Performance Score")
+
+score = int(prediction)
+st.progress(score / 100)
+st.write(f"Score: {score}/100")
+
+# Student Category (existing code continues)
+st.markdown("---")
+st.subheader("🎯 Student Category")subheader("🎯 Student Category")
 
     if prediction < 40:
         st.error("🔴 At Risk Student")
