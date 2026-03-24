@@ -14,10 +14,32 @@ st.title("🎓 Student Performance Predictor")
 # 🔥 File Upload
 uploaded_file = st.file_uploader("📂 Upload your school dataset (CSV)", type=["csv"])
 
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     st.success("✅ Custom dataset loaded!")
-    st.info("📌 Note: Model is trained on default dataset. Custom data is used for analysis only.")
+
+    # 🔥 PREPROCESS
+    df = pd.get_dummies(df, drop_first=True)
+
+    # Separate features & target
+    X = df.drop("Marks", axis=1)
+    y = df["Marks"]
+
+    # Split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train model
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+
+    # Update columns
+    columns = X.columns
+
+    st.success("🤖 Model retrained on uploaded data!")
+
 else:
     df = pd.read_csv("student_project.csv")
 
