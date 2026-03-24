@@ -3,10 +3,16 @@ import pandas as pd
 import numpy as np
 import joblib
 
+# 🔥 Session state
+if "predicted" not in st.session_state:
+    st.session_state.predicted = False
+
+# Load files
 importance = joblib.load("importance.pkl")
 model = joblib.load("model.pkl")
 columns = joblib.load("columns.pkl")
 df = pd.read_csv("student_project.csv")
+
 # Title
 st.title("🎓 Student Performance Predictor")
 
@@ -17,23 +23,20 @@ gender = st.selectbox("Gender", ["Male", "Female"])
 internet = st.selectbox("Internet Access", ["Yes", "No"])
 family = st.selectbox("Family Background", ["Low Income", "Middle Income", "High Income"])
 
-# Convert input to model format
-gender_male = 1 if gender == "Male" else 0
-internet_yes = 1 if internet == "Yes" else 0
+# Show message before prediction
+if not st.session_state.predicted:
+    st.info("👆 Enter details and click Predict to see results")
 
-low = 1 if family == "Low Income" else 0
-middle = 1 if family == "Middle Income" else 0
-high = 1 if family == "High Income" else 0
-
+# Predict button
 if st.button("Predict"):
+    st.session_state.predicted = True
 
-    # 🔹 Create input
     input_data = pd.DataFrame(0, index=[0], columns=columns)
 
     input_data['Study_hours'] = study_hours
     input_data['Attendance'] = attendance
-    input_data['Gender_Male'] = gender_male
-    input_data['Internet_access_Yes'] = internet_yes
+    input_data['Gender_Male'] = 1 if gender == "Male" else 0
+    input_data['Internet_access_Yes'] = 1 if internet == "Yes" else 0
 
     if 'Family Background_Low Income' in columns:
         input_data['Family Background_Low Income'] = 1 if family == "Low Income" else 0
@@ -44,13 +47,12 @@ if st.button("Predict"):
     if 'Family Background_High Income' in columns:
         input_data['Family Background_High Income'] = 1 if family == "High Income" else 0
 
-    # 🔥 Prediction
+    # Prediction
     prediction = model.predict(input_data)[0]
 
-    # 🔹 Output
     st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
 
-    # 🔹 Performance
+    # Performance
     if prediction < 40:
         st.error("⚠️ Student is At Risk! Needs immediate attention.")
     elif prediction < 70:
@@ -58,7 +60,7 @@ if st.button("Predict"):
     else:
         st.success("🌟 Great performance! Keep it up!")
 
-    # 🔹 Recommendations
+    # Recommendations
     st.subheader("📌 Recommendations")
 
     if study_hours < 2:
@@ -75,46 +77,50 @@ if st.button("Predict"):
 
     if prediction > 70:
         st.write("👉 Maintain consistency and keep practicing!")
-st.markdown("---")
-st.subheader("🧠 Final Insight Summary")
 
-if prediction < 40:
-    st.write("🔴 High risk student. Immediate intervention needed.")
-elif prediction < 70:
-    st.write("🟡 Moderate performance. Improvement required.")
-else:
-    st.write("🟢 Strong performance. Maintain consistency.")
+    # 🔥 Final Insight
+    st.markdown("---")
+    st.subheader("🧠 Final Insight Summary")
 
-st.write("📌 Key influencing factors:")
-st.write("• Study Hours and Attendance have highest impact")
-st.markdown("---")
-st.header("📊 Data Insights Dashboard")
+    if prediction < 40:
+        st.write("🔴 High risk student. Immediate intervention needed.")
+    elif prediction < 70:
+        st.write("🟡 Moderate performance. Improvement required.")
+    else:
+        st.write("🟢 Strong performance. Maintain consistency.")
 
-import matplotlib.pyplot as plt
-import seaborn as sns
+    st.write("📌 Key influencing factors:")
+    st.write("• Study Hours and Attendance have highest impact")
 
-fig1, ax1 = plt.subplots()
-sns.histplot(df['Marks'], bins=10, ax=ax1)
-ax1.set_title("Marks Distribution")
-st.pyplot(fig1)
-fig2, ax2 = plt.subplots()
-sns.scatterplot(x=df['Study_hours'], y=df['Marks'], ax=ax2)
-ax2.set_title("Study Hours vs Marks")
-st.pyplot(fig2)
-fig3, ax3 = plt.subplots()
-sns.heatmap(df[['Study_hours','Attendance','Marks']].corr(), annot=True, ax=ax3)
-ax3.set_title("Correlation Heatmap")
-st.pyplot(fig3)
-st.markdown("---")
-st.header("📊 Feature Importance")
-st.markdown("---")
-st.subheader("🧠 Final Insight Summary")
+# 🔥 Dashboard (only after prediction)
+if st.session_state.predicted:
 
-st.write("📌 Key influencing factors:")
-st.write("• Study Hours and Attendance have highest impact")
-import matplotlib.pyplot as plt
+    st.markdown("---")
+    st.header("📊 Data Insights Dashboard")
 
-fig, ax = plt.subplots()
-ax.barh(importance['Feature'], importance['Importance'])
-ax.set_title("Feature Importance")
-st.pyplot(fig)
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    fig1, ax1 = plt.subplots()
+    sns.histplot(df['Marks'], bins=10, ax=ax1)
+    ax1.set_title("Marks Distribution")
+    st.pyplot(fig1)
+
+    fig2, ax2 = plt.subplots()
+    sns.scatterplot(x=df['Study_hours'], y=df['Marks'], ax=ax2)
+    ax2.set_title("Study Hours vs Marks")
+    st.pyplot(fig2)
+
+    fig3, ax3 = plt.subplots()
+    sns.heatmap(df[['Study_hours','Attendance','Marks']].corr(), annot=True, ax=ax3)
+    ax3.set_title("Correlation Heatmap")
+    st.pyplot(fig3)
+
+    # Feature Importance
+    st.markdown("---")
+    st.header("📊 Feature Importance")
+
+    fig, ax = plt.subplots()
+    ax.barh(importance['Feature'], importance['Importance'])
+    ax.set_title("Feature Importance")
+    st.pyplot(fig)
