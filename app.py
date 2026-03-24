@@ -3,10 +3,6 @@ import pandas as pd
 import numpy as np
 import joblib
 
-# 🔥 Session state
-if "predicted" not in st.session_state:
-    st.session_state.predicted = False
-
 # Load files
 importance = joblib.load("importance.pkl")
 model = joblib.load("model.pkl")
@@ -23,14 +19,13 @@ gender = st.selectbox("Gender", ["Male", "Female"])
 internet = st.selectbox("Internet Access", ["Yes", "No"])
 family = st.selectbox("Family Background", ["Low Income", "Middle Income", "High Income"])
 
-# Info before prediction
-if not st.session_state.predicted:
-    st.info("👆 Enter details and click Predict to see results")
+# Info message
+st.info("👆 Enter details and click Predict to see results")
 
 # Predict button
 if st.button("Predict"):
-    st.session_state.predicted = True
 
+    # Prepare input
     input_data = pd.DataFrame(0, index=[0], columns=columns)
 
     input_data['Study_hours'] = study_hours
@@ -47,13 +42,13 @@ if st.button("Predict"):
     if 'Family Background_High Income' in columns:
         input_data['Family Background_High Income'] = 1 if family == "High Income" else 0
 
-    # 🔥 Prediction
+    # Prediction
     prediction = model.predict(input_data)[0]
 
-    # 🔹 Output
+    # Output
     st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
 
-    # 🔥 Student Category
+    # Student Category
     st.markdown("---")
     st.subheader("🎯 Student Category")
 
@@ -64,7 +59,7 @@ if st.button("Predict"):
     else:
         st.success("🟢 Top Performer")
 
-    # 🔹 Performance Message
+    # Performance Message
     if prediction < 40:
         st.error("⚠️ Student is At Risk! Needs immediate attention.")
     elif prediction < 70:
@@ -72,7 +67,7 @@ if st.button("Predict"):
     else:
         st.success("🌟 Great performance! Keep it up!")
 
-    # 🔹 Recommendations
+    # Recommendations
     st.subheader("📌 Recommendations")
 
     if study_hours < 2:
@@ -90,7 +85,7 @@ if st.button("Predict"):
     if prediction > 70:
         st.write("👉 Maintain consistency and keep practicing!")
 
-    # 🔥 Final Insight
+    # Final Insight
     st.markdown("---")
     st.subheader("🧠 Final Insight Summary")
 
@@ -104,9 +99,7 @@ if st.button("Predict"):
     st.write("📌 Key influencing factors:")
     st.write("• Study Hours and Attendance have highest impact")
 
-# 🔥 Dashboard (after prediction)
-if st.session_state.predicted:
-
+    # 🔥 Dashboard (NOW INSIDE BUTTON → FIXED UX)
     st.markdown("---")
     st.header("📊 Data Insights Dashboard")
 
@@ -128,7 +121,7 @@ if st.session_state.predicted:
     ax3.set_title("Correlation Heatmap")
     st.pyplot(fig3)
 
-    # 🔥 Feature Importance
+    # Feature Importance
     st.markdown("---")
     st.header("📊 Feature Importance")
 
