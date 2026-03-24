@@ -75,7 +75,12 @@ if st.button("Predict"):
 
     if prediction > 70:
         st.write("👉 Maintain consistency and keep practicing!")
-
+if prediction < 40:
+    st.write("🔴 High risk student. Immediate intervention needed.")
+elif prediction < 70:
+    st.write("🟡 Moderate performance. Improvement required.")
+else:
+    st.write("🟢 Strong performance. Maintain consistency.")
 st.markdown("---")
 st.header("📊 Data Insights Dashboard")
 
@@ -96,7 +101,11 @@ ax3.set_title("Correlation Heatmap")
 st.pyplot(fig3)
 st.markdown("---")
 st.header("📊 Feature Importance")
+st.markdown("---")
+st.subheader("🧠 Final Insight Summary")
 
+st.write("📌 Key influencing factors:")
+st.write("• Study Hours and Attendance have highest impact")
 import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots()
