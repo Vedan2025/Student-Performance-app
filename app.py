@@ -23,7 +23,7 @@ gender = st.selectbox("Gender", ["Male", "Female"])
 internet = st.selectbox("Internet Access", ["Yes", "No"])
 family = st.selectbox("Family Background", ["Low Income", "Middle Income", "High Income"])
 
-# Show message before prediction
+# Info before prediction
 if not st.session_state.predicted:
     st.info("👆 Enter details and click Predict to see results")
 
@@ -47,22 +47,24 @@ if st.button("Predict"):
     if 'Family Background_High Income' in columns:
         input_data['Family Background_High Income'] = 1 if family == "High Income" else 0
 
-    # Prediction
+    # 🔥 Prediction
     prediction = model.predict(input_data)[0]
-    
-if prediction < 40:
-    st.error("🔴 At Risk Student")
-elif prediction < 70:
-    st.warning("🟡 Average Student")
-else:
-    st.success("🟢 Top Performer")
 
-
+    # 🔹 Output
     st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
-    st.markdown("---")
-st.subheader("🎯 Student Category")
 
-    # Performance
+    # 🔥 Student Category
+    st.markdown("---")
+    st.subheader("🎯 Student Category")
+
+    if prediction < 40:
+        st.error("🔴 At Risk Student")
+    elif prediction < 70:
+        st.warning("🟡 Average Student")
+    else:
+        st.success("🟢 Top Performer")
+
+    # 🔹 Performance Message
     if prediction < 40:
         st.error("⚠️ Student is At Risk! Needs immediate attention.")
     elif prediction < 70:
@@ -70,7 +72,7 @@ st.subheader("🎯 Student Category")
     else:
         st.success("🌟 Great performance! Keep it up!")
 
-    # Recommendations
+    # 🔹 Recommendations
     st.subheader("📌 Recommendations")
 
     if study_hours < 2:
@@ -102,7 +104,7 @@ st.subheader("🎯 Student Category")
     st.write("📌 Key influencing factors:")
     st.write("• Study Hours and Attendance have highest impact")
 
-# 🔥 Dashboard (only after prediction)
+# 🔥 Dashboard (after prediction)
 if st.session_state.predicted:
 
     st.markdown("---")
@@ -126,7 +128,7 @@ if st.session_state.predicted:
     ax3.set_title("Correlation Heatmap")
     st.pyplot(fig3)
 
-    # Feature Importance
+    # 🔥 Feature Importance
     st.markdown("---")
     st.header("📊 Feature Importance")
 
