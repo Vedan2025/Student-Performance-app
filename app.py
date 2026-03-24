@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import joblib
 
-# Load model + importance
+# Load model files
 importance = joblib.load("importance.pkl")
 model = joblib.load("model.pkl")
 columns = joblib.load("columns.pkl")
@@ -21,21 +21,16 @@ if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     st.success("✅ Custom dataset loaded!")
 
-    # 🔥 PREPROCESS
     df = pd.get_dummies(df, drop_first=True)
 
-    # Separate features & target
     X = df.drop("Marks", axis=1)
     y = df["Marks"]
 
-    # Split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Train model
     model = RandomForestRegressor(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
 
-    # Update columns
     columns = X.columns
 
     st.success("🤖 Model retrained on uploaded data!")
@@ -58,12 +53,12 @@ gender = st.selectbox("Gender", ["Male", "Female"])
 internet = st.selectbox("Internet Access", ["Yes", "No"])
 family = st.selectbox("Family Background", ["Low Income", "Middle Income", "High Income"])
 
-st.info("👆 Enter details and click Predict to see results")
+st.info("👆 Enter details and click Predict")
 
 # Predict button
 if st.button("Predict"):
 
-    # 🔥 SEGMENTATION
+    # 🔥 Segmentation
     if study_hours > 3 and attendance > 80:
         segment = "High Effort Student"
     elif study_hours < 2 and attendance < 60:
@@ -73,13 +68,13 @@ if st.button("Predict"):
 
     st.markdown("---")
     st.subheader("🧠 Student Type")
-    st.info(f"Detected: {segment}")
+    st.info(segment)
 
-    # 🔥 CONFIDENCE
+    # 🔥 Confidence
     if segment == "Average Student":
         st.success("✅ Prediction Confidence: High")
     else:
-        st.warning("⚠️ Prediction Confidence: Moderate (pattern varies)")
+        st.warning("⚠️ Prediction Confidence: Moderate")
 
     # Prepare input
     input_data = pd.DataFrame(0, index=[0], columns=columns)
@@ -98,22 +93,23 @@ if st.button("Predict"):
     if 'Family Background_High Income' in columns:
         input_data['Family Background_High Income'] = 1 if family == "High Income" else 0
 
-# 🔥 Prediction
-prediction = model.predict(input_data)[0]
+    # 🔥 Prediction
+    prediction = model.predict(input_data)[0]
 
-st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
+    # Output
+    st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
 
-# 🔥 ADD THIS HERE 👇
-st.markdown("---")
-st.subheader("📊 Performance Score")
+    # 🔥 Performance Score
+    st.markdown("---")
+    st.subheader("📊 Performance Score")
 
-score = int(prediction)
-st.progress(score / 100)
-st.write(f"Score: {score}/100")
+    score = int(prediction)
+    st.progress(score / 100)
+    st.write(f"Score: {score}/100")
 
-# Student Category (existing code continues)
-st.markdown("---")
-st.subheader("🎯 Student Category")subheader("🎯 Student Category")
+    # 🔥 Student Category
+    st.markdown("---")
+    st.subheader("🎯 Student Category")
 
     if prediction < 40:
         st.error("🔴 At Risk Student")
@@ -122,7 +118,7 @@ st.subheader("🎯 Student Category")subheader("🎯 Student Category")
     else:
         st.success("🟢 Top Performer")
 
-    # Recommendations
+    # 🔥 Recommendations
     st.subheader("📌 Recommendations")
 
     if study_hours < 2:
@@ -140,7 +136,7 @@ st.subheader("🎯 Student Category")subheader("🎯 Student Category")
     if prediction > 70:
         st.write("👉 Maintain consistency and keep practicing!")
 
-    # Final Insight
+    # 🔥 Final Insight
     st.markdown("---")
     st.subheader("🧠 Final Insight Summary")
 
