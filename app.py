@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-    
+
+importance = joblib.load("importance.pkl")
 model = joblib.load("model.pkl")
 columns = joblib.load("columns.pkl")
 df = pd.read_csv("student_project.csv")
@@ -93,3 +94,12 @@ fig3, ax3 = plt.subplots()
 sns.heatmap(df[['Study_hours','Attendance','Marks']].corr(), annot=True, ax=ax3)
 ax3.set_title("Correlation Heatmap")
 st.pyplot(fig3)
+st.markdown("---")
+st.header("📊 Feature Importance")
+
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.barh(importance['Feature'], importance['Importance'])
+ax.set_title("Feature Importance")
+st.pyplot(fig)
