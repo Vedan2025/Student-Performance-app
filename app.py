@@ -3,14 +3,23 @@ import pandas as pd
 import numpy as np
 import joblib
 
-# Load files
+# Load model + importance
 importance = joblib.load("importance.pkl")
 model = joblib.load("model.pkl")
 columns = joblib.load("columns.pkl")
-df = pd.read_csv("student_project.csv")
 
 # Title
 st.title("🎓 Student Performance Predictor")
+
+# 🔥 File Upload
+uploaded_file = st.file_uploader("📂 Upload your school dataset (CSV)", type=["csv"])
+
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+    st.success("✅ Custom dataset loaded!")
+    st.info("📌 Note: Model is trained on default dataset. Custom data is used for analysis only.")
+else:
+    df = pd.read_csv("student_project.csv")
 
 # Inputs
 st.markdown("## 📋 Student Inputs")
@@ -32,7 +41,7 @@ st.info("👆 Enter details and click Predict to see results")
 # Predict button
 if st.button("Predict"):
 
-    # 🔥 STUDENT SEGMENTATION
+    # 🔥 SEGMENTATION
     if study_hours > 3 and attendance > 80:
         segment = "High Effort Student"
     elif study_hours < 2 and attendance < 60:
@@ -44,7 +53,7 @@ if st.button("Predict"):
     st.subheader("🧠 Student Type")
     st.info(f"Detected: {segment}")
 
-    # 🔥 CONFIDENCE LEVEL
+    # 🔥 CONFIDENCE
     if segment == "Average Student":
         st.success("✅ Prediction Confidence: High")
     else:
@@ -67,10 +76,9 @@ if st.button("Predict"):
     if 'Family Background_High Income' in columns:
         input_data['Family Background_High Income'] = 1 if family == "High Income" else 0
 
-    # Prediction
+    # 🔥 Prediction
     prediction = model.predict(input_data)[0]
 
-    # Output
     st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
 
     # Student Category
@@ -83,14 +91,6 @@ if st.button("Predict"):
         st.warning("🟡 Average Student")
     else:
         st.success("🟢 Top Performer")
-
-    # Performance Message
-    if prediction < 40:
-        st.error("⚠️ Student is At Risk! Needs immediate attention.")
-    elif prediction < 70:
-        st.warning("📊 Average performance. Can improve with effort.")
-    else:
-        st.success("🌟 Great performance! Keep it up!")
 
     # Recommendations
     st.subheader("📌 Recommendations")
@@ -124,7 +124,7 @@ if st.button("Predict"):
     st.write("📌 Key influencing factors:")
     st.write("• Study Hours and Attendance have highest impact")
 
-    # Dashboard
+    # 🔥 Dashboard
     st.markdown("---")
     st.header("📊 Data Insights Dashboard")
 
@@ -146,7 +146,7 @@ if st.button("Predict"):
     ax3.set_title("Correlation Heatmap")
     st.pyplot(fig3)
 
-    # Feature Importance
+    # 🔥 Feature Importance
     st.markdown("---")
     st.header("📊 Feature Importance")
 
