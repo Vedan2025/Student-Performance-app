@@ -75,12 +75,18 @@ if st.button("Predict"):
 
     if prediction > 70:
         st.write("👉 Maintain consistency and keep practicing!")
+st.markdown("---")
+st.subheader("🧠 Final Insight Summary")
+
 if prediction < 40:
     st.write("🔴 High risk student. Immediate intervention needed.")
 elif prediction < 70:
     st.write("🟡 Moderate performance. Improvement required.")
 else:
     st.write("🟢 Strong performance. Maintain consistency.")
+
+st.write("📌 Key influencing factors:")
+st.write("• Study Hours and Attendance have highest impact")
 st.markdown("---")
 st.header("📊 Data Insights Dashboard")
 
