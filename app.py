@@ -51,6 +51,15 @@ if st.button("Predict"):
     prediction = model.predict(input_data)[0]
 
     st.success(f"🎯 Predicted Marks: {round(prediction,2)}")
+    st.markdown("---")
+st.subheader("🎯 Student Category")
+
+if prediction < 40:
+    st.error("🔴 At Risk Student")
+elif prediction < 70:
+    st.warning("🟡 Average Student")
+else:
+    st.success("🟢 Top Performer")
 
     # Performance
     if prediction < 40:
