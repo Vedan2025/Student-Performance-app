@@ -44,13 +44,13 @@ if st.button("▶️ Run Experiment"):
     hours = np.arange(0, 12, 1)
     scores = [predict_performance(h, attendance, sleep, previous_score) for h in hours]
 
-    plt.figure()
-    plt.plot(hours, scores)
-    plt.xlabel("Study Hours")
-    plt.ylabel("Performance Score")
-    plt.title("Effect of Study Hours on Performance")
+    fig, ax = plt.subplots()
+    ax.plot(hours, scores)
+    ax.set_xlabel("Study Hours")
+    ax.set_ylabel("Performance Score")
+    ax.set_title("Effect of Study Hours on Performance")
 
-    st.pyplot(plt)
+    st.pyplot(fig)
 
     # ------------------ OBSERVATIONS ------------------
     st.header("📌 Observations & Insights")
@@ -66,7 +66,6 @@ if st.button("▶️ Run Experiment"):
 
     if result > previous_score:
         st.write("✅ Improvement observed compared to previous performance.")
-
     else:
         st.write("⚠️ Performance has not improved. Consider increasing study hours.")
 
@@ -91,4 +90,5 @@ if st.checkbox("Enable Comparison Mode"):
 
 # ------------------ RESET BUTTON ------------------
 if st.button("🔄 Reset Experiment"):
-    st.experimental_rerun()
+    st.session_state.clear()
+    st.rerun()
